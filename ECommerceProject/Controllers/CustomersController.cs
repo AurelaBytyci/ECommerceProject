@@ -4,6 +4,7 @@ using ECommerceProject.Data;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -17,9 +18,33 @@ public class CustomersController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
+    public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers(
+        string searchString,
+        string sortOrder,
+        int pageNumber = 1,
+        int pageSize = 10)
     {
-        return await _context.Customers.ToListAsync();
+        var customers = from c in _context.Customers
+                        select c;
+
+        if (!string.IsNullOrEmpty(searchString))
+        {
+            customers = customers.Where(c => c.LastName.Contains(searchString));
+        }
+
+        switch (sortOrder)
+        {
+            case "name_desc":
+                customers = customers.OrderByDescending(c => c.LastName);
+                break;
+            default:
+                customers = customers.OrderBy(c => c.LastName);
+                break;
+        }
+
+        return await customers.Skip((pageNumber - 1) * pageSize)
+                              .Take(pageSize)
+                              .ToListAsync();
     }
 
     [HttpGet("{id}")]
