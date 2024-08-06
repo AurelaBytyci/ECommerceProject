@@ -1,4 +1,8 @@
-using Microsoft.AspNetCore.Mvc;
+namespace ECommerceProject.Controllers
+{
+    public class OrdersController
+    {
+        using Microsoft.AspNetCore.Mvc;
 using ECommerceOrderManagementSystem.Models;
 using ECommerceOrderManagementSystem.Data;
 using System.Threading.Tasks;
@@ -84,5 +88,8 @@ public class OrdersController : ControllerBase
     private bool OrderExists(int id)
     {
         return _context.Orders.Any(e => e.OrderId == id);
+    }
+}
+
     }
 }
