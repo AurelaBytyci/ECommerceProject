@@ -42,6 +42,7 @@
     <ItemGroup>
         <Compile Include="Controllers\OrdersController.cs" />
         <Compile Include="Controllers\ProductsController.cs" />
+        <Compile Include="Models\Customer.cs" />
         <Compile Include="Models\Order.cs" />
         <Compile Include="Models\OrderItem.cs" />
         <Compile Include="Models\Product.cs" />
