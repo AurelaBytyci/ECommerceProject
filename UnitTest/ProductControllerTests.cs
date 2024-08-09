@@ -19,13 +19,11 @@ public class ProductsControllerTests
         _context = new ApplicationDbContext(options);
         _controller = new ProductsController(_context);
     }
-
+    
     [Fact]
     public async Task GetProducts_ReturnsEmptyList_WhenNoProducts()
     {
         var result = await _controller.GetProducts(null, null, 1, 10);
         Assert.Empty(result.Value);
     }
-
-    // Add more tests for other methods
 }
