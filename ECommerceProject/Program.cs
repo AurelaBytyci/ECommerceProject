@@ -34,6 +34,7 @@ namespace ECommerceProject
                 .AddDeveloperSigningCredential();
             services.AddAuthentication();
             services.AddControllers();
+            services.AddSwaggerGen();
         }
 
         public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -41,7 +42,10 @@ namespace ECommerceProject
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ECommerce API v1"));
             }
+
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseIdentityServer();
@@ -51,5 +55,6 @@ namespace ECommerceProject
                 endpoints.MapControllers();
             });
         }
+
     }
 }
