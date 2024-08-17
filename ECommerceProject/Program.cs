@@ -1,43 +1,64 @@
-﻿namespace ECommerceProject
+﻿using ECommerceProject.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using MySql.Data.MySqlClient;
+
+namespace ECommerceProject
 {
     internal class Program
     {
         public static void Main(string[] args)
         {
-            // In Startup.cs
-            public void ConfigureServices(IServiceCollection services)
+            var builder = WebApplication.CreateBuilder(args);
+
+            ConfigureServices(builder.Services, builder.Configuration);
+
+            var app = builder.Build();
+
+            Configure(app, app.Environment);
+
+            app.Run();
+        }
+
+        public static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
+        {
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
+
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+
+            services.AddIdentityServer()
+                .AddInMemoryClients(Config.Clients)
+                .AddInMemoryApiResources(Config.ApiResources)
+                .AddInMemoryApiScopes(Config.ApiScopes)
+                .AddInMemoryIdentityResources(Config.IdentityResources)
+                .AddTestUsers(Config.TestUsers)
+                .AddDeveloperSigningCredential();
+
+            services.AddAuthentication();
+
+            services.AddControllers();
+        }
+
+        public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            if (env.IsDevelopment())
             {
-                // Other configurations...
-
-                services.AddIdentityServer()
-                    .AddInMemoryClients(Config.Clients)
-                    .AddInMemoryApiResources(Config.ApiResources)
-                    .AddInMemoryApiScopes(Config.ApiScopes)
-                    .AddInMemoryIdentityResources(Config.IdentityResources)
-                    .AddTestUsers(Config.TestUsers)
-                    .AddDeveloperSigningCredential();
-
-                services.AddAuthentication();
+                app.UseDeveloperExceptionPage();
             }
 
-            public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+            app.UseHttpsRedirection();
+            app.UseRouting();
+            app.UseIdentityServer();
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
             {
-                if (env.IsDevelopment())
-                {
-                    app.UseDeveloperExceptionPage();
-                }
-
-                app.UseHttpsRedirection();
-                app.UseRouting();
-                app.UseIdentityServer();
-                app.UseAuthorization();
-
-                app.UseEndpoints(endpoints =>
-                {
-                    endpoints.MapControllers();
-                });
-            }
-
+                endpoints.MapControllers();
+            });
         }
     }
 }
