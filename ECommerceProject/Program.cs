@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 
 namespace ECommerceProject
@@ -13,23 +14,17 @@ namespace ECommerceProject
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
             ConfigureServices(builder.Services, builder.Configuration);
-
             var app = builder.Build();
-
             Configure(app, app.Environment);
-
             app.Run();
         }
 
         public static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
             var connectionString = configuration.GetConnectionString("DefaultConnection");
-
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
-
+                options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 21))));
             services.AddIdentityServer()
                 .AddInMemoryClients(Config.Clients)
                 .AddInMemoryApiResources(Config.ApiResources)
@@ -37,9 +32,7 @@ namespace ECommerceProject
                 .AddInMemoryIdentityResources(Config.IdentityResources)
                 .AddTestUsers(Config.TestUsers)
                 .AddDeveloperSigningCredential();
-
             services.AddAuthentication();
-
             services.AddControllers();
         }
 
@@ -49,12 +42,10 @@ namespace ECommerceProject
             {
                 app.UseDeveloperExceptionPage();
             }
-
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseIdentityServer();
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
