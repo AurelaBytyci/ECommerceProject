@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using ECommerceProject.Models;
-using ECommerceProject.Data;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
