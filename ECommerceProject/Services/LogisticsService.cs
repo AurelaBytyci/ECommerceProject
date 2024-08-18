@@ -6,12 +6,6 @@ using Newtonsoft.Json;
 
 namespace ECommerceProject.Services
 {
-    public interface ILogisticsService
-    {
-        bool ArrangeShipment(string shipmentDetails);
-        Task<string> GetOrderStatus(int orderId);
-    }
-
     public class LogisticsService : ILogisticsService
     {
         public bool ArrangeShipment(string shipmentDetails)
@@ -41,7 +35,6 @@ namespace ECommerceProject.Services
 
         public async Task<string> GetOrderStatus(int orderId)
         {
-            // Logic to retrieve the order status from a third-party API
             using (var client = new HttpClient())
             {
                 var response = await client.GetAsync($"https://logisticsapi.com/api/shipments/{orderId}/status");

@@ -1,9 +1,10 @@
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using ECommerceProject.Data;
 using ECommerceProject.Models;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 
 [Route("api/[controller]")]
 [ApiController]
