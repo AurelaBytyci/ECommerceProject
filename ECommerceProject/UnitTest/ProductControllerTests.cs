@@ -1,8 +1,8 @@
+using Microsoft.EntityFrameworkCore;
 using Xunit;
 using ECommerceProject.Controllers;
 using ECommerceProject.Models;
 using ECommerceProject.Data;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
