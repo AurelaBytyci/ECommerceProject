@@ -6,44 +6,47 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 
-[Authorize(Roles = "Admin, Customer, Staff")]
-[ApiController]
-[Route("api/[controller]")]
-public class OrdersController : ControllerBase
+namespace ECommerceProject.Controllers 
 {
-    private readonly ILogisticsService _logisticsService;
-    private readonly ILogger<OrdersController> _logger;
-
-    public OrdersController(ILogisticsService logisticsService, ILogger<OrdersController> logger)
+    [Authorize(Roles = "Admin, Customer, Staff")]
+    [ApiController]
+    [Route("api/[controller]")]
+    public class OrdersController : ControllerBase
     {
-        _logisticsService = logisticsService;
-        _logger = logger;
-    }
+        private readonly ILogisticsService _logisticsService;
+        private readonly ILogger<OrdersController> _logger;
 
-    [HttpGet("{orderId}/status")]
-    public async Task<IActionResult> GetOrderStatus(int orderId)
-    {
-        var status = await _logisticsService.GetOrderStatus(orderId);
-        if (status == null)
+        public OrdersController(ILogisticsService logisticsService, ILogger<OrdersController> logger)
         {
-            return NotFound();
+            _logisticsService = logisticsService;
+            _logger = logger;
         }
-        return Ok(status);
-    }
 
-    [HttpPost]
-    public async Task<IActionResult> CreateOrder(Order order)
-    {
-        try
+        [HttpGet("{orderId}/status")]
+        public async Task<IActionResult> GetOrderStatus(int orderId)
         {
-            _logger.LogInformation("Creating a new order for CustomerId: {CustomerId}", order.CustomerId);
-            // Order creation logic
-            return Ok(order);
+            var status = await _logisticsService.GetOrderStatus(orderId);
+            if (status == null)
+            {
+                return NotFound();
+            }
+            return Ok(status);
         }
-        catch (Exception ex)
+
+        [HttpPost]
+        public async Task<IActionResult> CreateOrder(Order order)
         {
-            _logger.LogError(ex, "Error occurred while creating an order for CustomerId: {CustomerId}", order.CustomerId);
-            return StatusCode(500, "Internal server error");
+            try
+            {
+                _logger.LogInformation("Creating a new order for CustomerId: {CustomerId}", order.CustomerId);
+                // Order creation logic
+                return Ok(order);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while creating an order for CustomerId: {CustomerId}", order.CustomerId);
+                return StatusCode(500, "Internal server error");
+            }
         }
     }
 }

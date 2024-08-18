@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using ECommerceProject.Models;
 
-namespace ECommerceProject.Models
+namespace ECommerceProject.Data
 {
     public class ApplicationDbContext : DbContext
     {
@@ -15,6 +16,7 @@ namespace ECommerceProject.Models
         {
             base.OnModelCreating(modelBuilder);
 
+            // Configure the primary key for Product
             modelBuilder.Entity<Product>()
                 .HasKey(p => p.ProductId);
         }
