@@ -11,7 +11,6 @@ namespace ECommerceProject.Models
         public DbSet<Product> Products { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
 
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
