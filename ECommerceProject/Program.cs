@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using MySql.Data.MySqlClient;
 
 namespace ECommerceProject
@@ -35,6 +36,8 @@ namespace ECommerceProject
             services.AddAuthentication();
             services.AddControllers();
             services.AddSwaggerGen();
+            services.AddScoped<ILogisticsService, LogisticsService>();
+            services.AddScoped<IPaymentService, PaymentService>();
         }
 
         public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -55,6 +58,5 @@ namespace ECommerceProject
                 endpoints.MapControllers();
             });
         }
-
     }
 }
