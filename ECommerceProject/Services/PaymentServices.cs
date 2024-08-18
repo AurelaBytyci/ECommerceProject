@@ -1,26 +1,33 @@
 using System;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using ECommerceProject.Models;
+using Newtonsoft.Json;
 
 namespace ECommerceProject.Services
 {
-    public interface IPaymentService
-    {
-        Task<bool> ProcessPayment(Order order);
-    }
-
     public class PaymentService : IPaymentService
     {
         public async Task<bool> ProcessPayment(Order order)
         {
             try
             {
-                // Simulate the payment process without calling an external gateway.
-                await Task.Delay(1000); // Simulate a delay for processing
+                var serializedPayment = SerializePaymentDetails(order);
+                var apiResponse = await CallPaymentGatewayAsync(serializedPayment);
 
-                order.Status = "Paid"; // Assume payment is successful
-                SaveTransactionDetails(order);
-                return true;
+                if (apiResponse.IsSuccessStatusCode)
+                {
+                    order.Status = "Paid";
+                    SaveTransactionDetails(await apiResponse.Content.ReadAsStringAsync());
+                    return true;
+                }
+                else
+                {
+                    order.Status = "Payment Failed";
+                    LogPaymentError(apiResponse.ReasonPhrase);
+                    return false;
+                }
             }
             catch (Exception ex)
             {
@@ -28,19 +35,27 @@ namespace ECommerceProject.Services
             }
         }
 
-        private void SaveTransactionDetails(Order order)
+        private string SerializePaymentDetails(object paymentDetails)
+        {
+            return JsonConvert.SerializeObject(paymentDetails);
+        }
+
+        private async Task<HttpResponseMessage> CallPaymentGatewayAsync(string serializedPayment)
+        {
+            using (var client = new HttpClient())
+            {
+                return await client.PostAsync("https://paymentgateway.com/api/payments", new StringContent(serializedPayment, Encoding.UTF8, "application/json"));
+            }
+        }
+
+        private void SaveTransactionDetails(string transactionDetails)
         {
             // Logic to save transaction details to the database or another storage system
-            Console.WriteLine($"Transaction for Order ID {order.OrderId} has been processed successfully.");
         }
-    }
 
-    public class PaymentException : Exception
-    {
-        public PaymentException() { }
-
-        public PaymentException(string message) : base(message) { }
-
-        public PaymentException(string message, Exception inner) : base(message, inner) { }
+        private void LogPaymentError(string errorMessage)
+        {
+            Console.WriteLine($"Payment Service Error: {errorMessage}");
+        }
     }
 }
