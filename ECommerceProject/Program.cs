@@ -4,10 +4,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ECommerceProject.Data;
-using ECommerceProject.Services;
 using Microsoft.EntityFrameworkCore;
-using MySql.EntityFrameworkCore.Extensions;
-
+using Swashbuckle.AspNetCore.SwaggerGen;
+using ECommerceProject.Services;
 
 namespace ECommerceProject
 {

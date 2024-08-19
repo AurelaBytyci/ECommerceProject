@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace ECommerceProject.Models
 {
     public class Customer
@@ -7,6 +9,6 @@ namespace ECommerceProject.Models
         public string LastName { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
-        public object Orders { get; internal set; }
+        public ICollection<Order> Orders { get; set; }
     }
 }

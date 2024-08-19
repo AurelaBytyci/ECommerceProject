@@ -1,13 +1,14 @@
-using ECommerceProject.Services;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using ECommerceProject.Services;
 
 public class LogisticsService : ILogisticsService
 {
     public bool ArrangeShipment(string shipmentDetails)
     {
-        throw new System.NotImplementedException();
+        // Your logic here
+        throw new NotImplementedException();
     }
 
     public async Task<string> GetOrderStatus(int orderId)
@@ -26,6 +27,7 @@ public class LogisticsService : ILogisticsService
             }
         }
     }
+
     private void LogError(string message)
     {
         Console.WriteLine($"Error: {message}");

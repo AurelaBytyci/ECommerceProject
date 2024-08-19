@@ -11,6 +11,7 @@ namespace ECommerceProject.Models
         public decimal TotalAmount { get; set; }
         public string Status { get; set; }
 
+        public Customer Customer { get; set; }
         public ICollection<OrderItem> OrderItems { get; set; }
     }
 }

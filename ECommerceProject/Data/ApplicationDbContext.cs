@@ -39,9 +39,10 @@ namespace ECommerceProject.Data
                 .HasForeignKey(oi => oi.OrderId);
 
             modelBuilder.Entity<Customer>()
-                .HasMany(c => c.Orders)
-                .WithOne(o => o.Customer)
-                .HasForeignKey(o => o.CustomerId);
+           .HasMany(c => c.Orders)
+           .WithOne(o => o.Customer)
+           .HasForeignKey(o => o.CustomerId);
+
 
             modelBuilder.Entity<Product>()
                 .HasMany(p => p.OrderItems)

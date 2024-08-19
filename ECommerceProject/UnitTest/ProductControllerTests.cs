@@ -1,8 +1,8 @@
-using Microsoft.EntityFrameworkCore;
 using Xunit;
 using ECommerceProject.Controllers;
 using ECommerceProject.Models;
 using ECommerceProject.Data;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -19,7 +19,7 @@ public class ProductsControllerTests
         _context = new ApplicationDbContext(options);
         _controller = new ProductsController(_context);
     }
-    
+
     [Fact]
     public async Task GetProducts_ReturnsEmptyList_WhenNoProducts()
     {
